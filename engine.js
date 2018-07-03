@@ -23,7 +23,7 @@ JCRPGE=function(){
     }
   }
   Entity=function(gfx, info){
-    setBulkProperties(this, [stats, moveSet, gfx, info]);
+    setBulkProperties(this, [gfx, info]);
     this.render = function(){
       ctx.drawImage(imgList[this.img], this.srcX, this.srcY, this.srcWidth,
         this.srcHeight, this.x, this.y, this.srcWidth, this.srcHeight);
@@ -33,21 +33,29 @@ JCRPGE=function(){
     }
     ENTITIES.push(this);
   }
-  Creature=function(stat, moveset, gfx, infoS){
+  Creature=function(stat, moveset, gfx, info){
+    Entity.call(gfx, info);
+    setBulkProperties(this, [stats, moveSet]);
+    
   }
   function setCanvas(width,height){
     CANVAS.id="ctx";
-    canvas.width=(width==null)?DEFAULT_CTX_WIDTH:width;
-    canvas.height=(height==null)?DEFAULT_CTX_HEIGHT:height;
+    CANVAS.width=(width==null)?DEFAULT_CTX_WIDTH:width;
+    CANVAS.height=(height==null)?DEFAULT_CTX_HEIGHT:height;
     document.body.appendChild(CANVAS);
   }
 
-  function startGame(){
+  function update(){
+    CANVAS.clearRect(0,0,CANVAS.width,CANVAS.height);
+  }
 
+  function startGame(){
+    setInterval(update, 20);
   }
 
   return {
-
+    start: startGame,
+    setCanvas: setCanvas
   }
 }
 var game=JCRPGE();
